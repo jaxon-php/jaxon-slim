@@ -1,0 +1,26 @@
+{
+    "name": "jaxon-php/jaxon-slim",
+    "type": "library",
+    "description": "Jaxon library integration for the Slim framework",
+    "authors": [
+        {"name": "Thierry Feuzeu"}
+    ],
+    "homepage": "https://github.com/jaxon-php/jaxon-slim",
+    "license": "BSD-3-Clause",
+    "keywords": ["Jaxon", "Ajax", "PHP", "Slim"],
+    "support": {
+        "issues": "https://github.com/jaxon-php/jaxon-slim/issues",
+        "source": "https://github.com/jaxon-php/jaxon-slim"
+    },
+    "require": {
+        "jaxon-php/jaxon-core": "^4.0",
+        "Slimphp/Slimphp": "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jaxon\\Slim\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
