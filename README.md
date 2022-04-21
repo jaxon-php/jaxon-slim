@@ -89,12 +89,12 @@ So, if the Jaxon classes need to display views defined in the Slim application, 
 middleware needs to be replaced.
 
 ```php
-
 // Process Jaxon ajax requests
 $app->get('/jaxon', function($request, $response) {
-    // Could not process the request. Show an error.
     $jaxon = jaxon()−>app();
-    // Uncomment the following three lines to set a view renderer
+
+    // In this case, the views are displayed with the slim/twig-view package.
+    $view = Twig::fromRequest($request);
     $jaxon->addViewRenderer('slim', '', function() use($view, $response) {
         return new \Jaxon\Slim\View($view, $response);
     });

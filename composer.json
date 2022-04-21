@@ -14,7 +14,7 @@
     },
     "require": {
         "jaxon-php/jaxon-core": "^4.0",
-        "Slimphp/Slimphp": "4.*"
+        "slim/slim": "4.*"
     },
     "autoload": {
         "psr-4": {
