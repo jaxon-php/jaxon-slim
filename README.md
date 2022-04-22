@@ -52,59 +52,67 @@ $jaxonConfigMiddleware = function(Request $request, RequestHandler $handler) {
         // ->container($container)
         // Uncomment the following line to set a logger
         // ->logger($logger)
-        // Uncomment this to set a view renderer
         ->config(__DIR__ . '/../config/jaxon.php')->process($request, $handler);
 };
 
-// Jaxon middleware to process ajax requests
-$jaxonAjaxMiddleware = function(Request $request, RequestHandler $handler) {
-    return jaxon()->psr()->ajax()->process($request, $handler);
-};
-
 // Process Jaxon ajax requests
-$app->get('/jaxon', function() {
-    // Todo: return an error. Jaxon could not find a plugin to process the request.
-})->add($jaxonConfigMiddleware)->add($jaxonAjaxMiddleware);
+$app->group('/', function() use($app) {
+    // Jaxon middleware to process ajax requests
+    $jaxonAjaxMiddleware = function(Request $request, RequestHandler $handler) {
+        return jaxon()->psr()->ajax()->process($request, $handler);
+    };
 
-// Insert Jaxon codes in a page
-$app->get('/', function() {
-    // Display a page with Jaxon js and css codes.
-    $jaxon = jaxon()−>app();
-    $css = $jaxon->css();
-    $js = $jaxon->js();
-    $script = $jaxon->script();
-    // Display the page
-    ...
+    $app->post('/jaxon', function($request, $response) {
+        // Todo: return an error. Jaxon could not find a plugin to process the request.
+    })->add($jaxonAjaxMiddleware);
+
+    // Insert Jaxon codes in a page
+    $app->get('/', function($request, $response) {
+        // Display a page with Jaxon js and css codes.
+        $jaxon = jaxon()−>app();
+        $css = $jaxon->css();
+        $js = $jaxon->js();
+        $script = $jaxon->script();
+        // Display the page
+        ...
+    });
 })->add($jaxonConfigMiddleware);
 ```
 
 Setting the view renderer
 -------------------------
 
-The Slim view renderer requires access to the response object.
-It is then impossible to use it together with the `Jaxon ajax` middleware, which gives access
-to the response object only after the request has been processed.
+The Slim framework provides two components for view rendering, and both can be used with the
+[Jaxon view renderer](https://www.jaxon-php.org/docs/v3x/advanced/views.html).
 
-So, if the Jaxon classes need to display views defined in the Slim application, then the `Jaxon ajax`
-middleware needs to be replaced.
+The [Twig-View](https://github.com/slimphp/Twig-View) component displays Twig views.
 
 ```php
-// Process Jaxon ajax requests
-$app->get('/jaxon', function($request, $response) {
-    $jaxon = jaxon()−>app();
+// Add Twig-View Middleware
+$twig = Twig::create(__DIR__ . '/../templates', ['cache' => false]);
+$app->add(TwigMiddleware::create($app, $twig));
 
-    // In this case, the views are displayed with the slim/twig-view package.
-    $view = Twig::fromRequest($request);
-    $jaxon->addViewRenderer('slim', '', function() use($view, $response) {
-        return new \Jaxon\Slim\View($view, $response);
-    });
-    if(!$jaxon->canProcessRequest())
-    {
-        // Todo: return an error. Jaxon could not find a plugin to process the request.
-    }
-    $jaxon->processRequest();
-    return $jaxon->getResponse()->toPsr();
-})->add($jaxonConfigMiddleware);
+$jaxonConfigMiddleware = function(Request $request, RequestHandler $handler) {
+    return jaxon()->psr()
+        ->view('slim', '.html.twig', function() use($request) {
+            $view = Twig::fromRequest($request);
+            return new \Jaxon\Slim\View($view);
+        })
+        ->config(__DIR__ . '/../jaxon/config.php')->process($request, $handler);
+};
+```
+
+The [PHP-View](https://github.com/slimphp/PHP-View) component displays PHP views.
+
+```php
+$jaxonConfigMiddleware = function(Request $request, RequestHandler $handler) {
+    return jaxon()->psr()
+        ->view('slim', '.php', function() use($request) {
+            $view = new PhpRenderer(__DIR__ . '/../templates');
+            return new \Jaxon\Slim\View($view);
+        })
+        ->config(__DIR__ . '/../jaxon/config.php')->process($request, $handler);
+};
 ```
 
 Usage

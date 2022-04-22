@@ -4,32 +4,29 @@ namespace Jaxon\Slim;
 
 use Jaxon\App\View\ViewInterface;
 use Jaxon\App\View\Store;
-use Psr\Http\Message\ResponseInterface;
 
 use function trim;
 
 class View implements ViewInterface
 {
     /**
+     * @var array
+     */
+    protected $aNamespaces;
+
+    /**
      * @var mixed
      */
     protected $xView;
 
     /**
-     * @var ResponseInterface
-     */
-    protected $xResponse;
-
-    /**
      * The constructor
      *
      * @param mixed $xView
-     * @param ResponseInterface $xResponse
      */
-    public function __construct($xView, ResponseInterface $xResponse)
+    public function __construct($xView)
     {
         $this->xView = $xView;
-        $this->xResponse = $xResponse;
     }
 
     /**
@@ -42,7 +39,9 @@ class View implements ViewInterface
      * @return void
      */
     public function addNamespace(string $sNamespace, string $sDirectory, string $sExtension = '')
-    {}
+    {
+        $this->aNamespaces[$sNamespace] = ['extension' => $sExtension];
+    }
 
     /**
      * Render a view
@@ -54,6 +53,7 @@ class View implements ViewInterface
     public function render(Store $store): string
     {
         // Render the template
-        return trim($this->xView->render($this->xResponse, $store->getViewName(), $store->getViewData()), " \t\n");
+        $sViewName = $store->getViewName() . ($this->aNamespaces[$store->getNamespace()]['extension'] ?? '');
+        return trim((string)$this->xView->fetch($sViewName, $store->getViewData()), " \t\n");
     }
 }
