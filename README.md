@@ -1,5 +1,5 @@
-Jaxon Library for Slim
-======================
+Jaxon integration for the Slim Framework
+========================================
 
 This package integrates the [Jaxon library](https://github.com/jaxon-php/jaxon-core) into the Slim framework.
 
