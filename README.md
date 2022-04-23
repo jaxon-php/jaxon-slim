@@ -1,5 +1,5 @@
 Jaxon Library for Slim
-=========================
+======================
 
 This package integrates the [Jaxon library](https://github.com/jaxon-php/jaxon-core) into the Slim framework.
 
@@ -132,13 +132,13 @@ The following options can be defined in the `app` section of the config file.
 By default, the `views` array is empty. Views are rendered from the framework default location.
 There's a single entry in the `directories` array with the following values.
 
-| Name | Default value | Description |
-|------|---------------|-------------|
-| directory | ROOT . '/jaxon/App' | The directory of the Jaxon classes |
-| namespace | \Jaxon\App  | The namespace of the Jaxon classes |
-| separator | .           | The separator in Jaxon class names |
-| protected | empty array | Prevent Jaxon from exporting some methods |
-| | | |
+| Name | Default value        | Description |
+|------|----------------------|-------------|
+| directory | ROOT . '/jaxon/ajax' | The directory of the Jaxon classes |
+| namespace | \Jaxon\Ajax          | The namespace of the Jaxon classes |
+| separator | .                    | The separator in Jaxon class names |
+| protected | empty array          | Prevent Jaxon from exporting some methods |
+| |                      | |
 
 Usage
 -----
