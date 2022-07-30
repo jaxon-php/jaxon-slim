@@ -37,7 +37,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Response;
-use function jaxon;
+use function Jaxon\jaxon;
 
 require __DIR__ . '/../vendor/autoload.php';
 
