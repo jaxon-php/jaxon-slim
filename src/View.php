@@ -2,8 +2,8 @@
 
 namespace Jaxon\Slim;
 
-use Jaxon\App\View\ViewInterface;
 use Jaxon\App\View\Store;
+use Jaxon\App\View\ViewInterface;
 
 use function trim;
 
