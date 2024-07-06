@@ -16,6 +16,10 @@
         "jaxon-php/jaxon-core": "v5.x-dev",
         "slim/slim": "4.*"
     },
+    "require-dev": {
+        "slim/twig-view": "^3.0",
+        "slim/php-view": "^3.0"
+    },
     "autoload": {
         "psr-4": {
             "Jaxon\\Slim\\": "src/"

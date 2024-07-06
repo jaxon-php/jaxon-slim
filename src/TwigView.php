@@ -4,30 +4,26 @@ namespace Jaxon\Slim;
 
 use Jaxon\App\View\Store;
 use Jaxon\App\View\ViewInterface;
+use Slim\Views\Twig;
 
+use function ltrim;
+use function str_replace;
 use function trim;
 
-class View implements ViewInterface
+class TwigView implements ViewInterface
 {
     /**
      * @var array
      */
-    protected $aNamespaces;
-
-    /**
-     * @var mixed
-     */
-    protected $xView;
+    private array $aExtensions = [];
 
     /**
      * The constructor
      *
-     * @param mixed $xView
+     * @param mixed $xRenderer
      */
-    public function __construct($xView)
-    {
-        $this->xView = $xView;
-    }
+    public function __construct(private Twig $xRenderer)
+    {}
 
     /**
      * Add a namespace to this view renderer
@@ -40,7 +36,8 @@ class View implements ViewInterface
      */
     public function addNamespace(string $sNamespace, string $sDirectory, string $sExtension = '')
     {
-        $this->aNamespaces[$sNamespace] = ['extension' => $sExtension];
+        $this->aExtensions[$sNamespace] = '.' . ltrim($sExtension, '.');
+        $this->xRenderer->getLoader()->addPath($sDirectory, $sNamespace);
     }
 
     /**
@@ -52,8 +49,16 @@ class View implements ViewInterface
      */
     public function render(Store $store): string
     {
+        $sNamespace = $store->getNamespace();
+        $sViewName = !$sNamespace || $sNamespace === 'slim' ? $store->getViewName() :
+            '@' . $sNamespace . '/' . $store->getViewName();
+        $sViewName = str_replace('.', '/', $sViewName);
+        if(isset($this->aExtensions[$sNamespace]))
+        {
+            $sViewName .= $this->aExtensions[$sNamespace];
+        }
+
         // Render the template
-        $sViewName = $store->getViewName() . ($this->aNamespaces[$store->getNamespace()]['extension'] ?? '');
-        return trim((string)$this->xView->fetch($sViewName, $store->getViewData()), " \t\n");
+        return trim((string)$this->xRenderer->fetch($sViewName, $store->getViewData()), " \t\n");
     }
 }

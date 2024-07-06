@@ -88,17 +88,22 @@ The Slim framework provides two components for view rendering, and both can be u
 The [Twig-View](https://github.com/slimphp/Twig-View) component displays Twig views.
 
 ```php
+use Jaxon\Slim\Helper;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Views\TwigMiddleware;
+
 // Add Twig-View Middleware
-$twig = Twig::create(__DIR__ . '/../templates', ['cache' => false]);
+$twig = Helper::twig(__DIR__ . '/../templates', ['cache' => false]);
 $app->add(TwigMiddleware::create($app, $twig));
 
 $jaxonConfigMiddleware = function(Request $request, RequestHandler $handler) {
     return jaxon()->psr()
-        ->view('slim', '.html.twig', function() use($request) {
-            $view = Twig::fromRequest($request);
-            return new \Jaxon\Slim\View($view);
+        ->view('twig', '.html.twig', function() use($request) {
+            return Helper::twigView($request);
         })
-        ->config(__DIR__ . '/../jaxon/config.php')->process($request, $handler);
+        ->config(__DIR__ . '/../jaxon/config.php')
+        ->process($request, $handler);
 };
 ```
 
@@ -107,11 +112,11 @@ The [PHP-View](https://github.com/slimphp/PHP-View) component displays PHP views
 ```php
 $jaxonConfigMiddleware = function(Request $request, RequestHandler $handler) {
     return jaxon()->psr()
-        ->view('slim', '.php', function() use($request) {
-            $view = new PhpRenderer(__DIR__ . '/../templates');
-            return new \Jaxon\Slim\View($view);
+        ->view('php', '.php', function() {
+            return Helper::phpView(__DIR__ . '/../templates');
         })
-        ->config(__DIR__ . '/../jaxon/config.php')->process($request, $handler);
+        ->config(__DIR__ . '/../jaxon/config.php')
+        ->process($request, $handler);
 };
 ```
 
