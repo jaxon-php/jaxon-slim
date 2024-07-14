@@ -12,6 +12,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 use function Jaxon\attr;
+use function Jaxon\jaxon;
 use function Jaxon\jq;
 use function Jaxon\js;
 use function Jaxon\pm;
@@ -52,6 +53,14 @@ class Helper
         $renderer->addFunction(new TwigFunction('js', fn(...$aParams) => js(...$aParams)));
         $renderer->addFunction(new TwigFunction('rq', fn(...$aParams) => rq(...$aParams)));
         $renderer->addFunction(new TwigFunction('pm', fn() => pm()));
+
+        // Functions for Jaxon js and CSS codes
+        $renderer->addFunction(new TwigFunction('jxnCss',
+            fn() => jaxon()->css(), ['is_safe' => ['html']]));
+        $renderer->addFunction(new TwigFunction('jxnJs',
+            fn() => jaxon()->js(), ['is_safe' => ['html']]));
+        $renderer->addFunction(new TwigFunction('jxnScript',
+            fn() => jaxon()->script(), ['is_safe' => ['html']]));
 
         return $twig;
     }
