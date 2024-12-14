@@ -39,6 +39,8 @@ class Helper
         $renderer->addFilter(new TwigFilter('jxnBind',
             fn(JxnCall $xJxnCall, string $item = '') =>
                 attr()->bind($xJxnCall, $item), ['is_safe' => ['html']]));
+        $renderer->addFilter(new TwigFilter('jxnPagination',
+            fn(JxnCall $xJxnCall) => attr()->pagination($xJxnCall), ['is_safe' => ['html']]));
         $renderer->addFilter(new TwigFilter('jxnOn',
             fn(JsExpr $xJsExpr, string|array $on) =>
                 attr()->on($on, $xJsExpr), ['is_safe' => ['html']]));
@@ -54,6 +56,8 @@ class Helper
         $renderer->addFunction(new TwigFunction('jxnBind',
             fn(JxnCall $xJxnCall, string $item = '') =>
                 attr()->bind($xJxnCall, $item), ['is_safe' => ['html']]));
+        $renderer->addFunction(new TwigFunction('jxnPagination',
+            fn(JxnCall $xJxnCall) => attr()->pagination($xJxnCall), ['is_safe' => ['html']]));
         $renderer->addFunction(new TwigFunction('jxnOn',
             fn(string|array $on, JsExpr $xJsExpr) =>
                 attr()->on($on, $xJsExpr), ['is_safe' => ['html']]));
