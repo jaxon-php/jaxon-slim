@@ -13,7 +13,7 @@
         "source": "https://github.com/jaxon-php/jaxon-slim"
     },
     "require": {
-        "jaxon-php/jaxon-core": "dev-main",
+        "jaxon-php/jaxon-core": "^5.0",
         "slim/slim": "4.*"
     },
     "require-dev": {

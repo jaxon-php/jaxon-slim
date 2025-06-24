@@ -37,7 +37,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Response;
-use function Jaxon\jaxon;
+
+use function jaxon;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -57,6 +58,12 @@ $jaxonConfigMiddleware = function(Request $request, RequestHandler $handler) {
 
 // Process Jaxon ajax requests
 $app->group('/', function() use($app) {
+    // Register the app container with the Jaxon library.
+    if(($container = $app->getContainer()) !== null)
+    {
+        jaxon()->app()->setContainer($container);
+    }
+
     // Jaxon middleware to process ajax requests
     $jaxonAjaxMiddleware = function(Request $request, RequestHandler $handler) {
         return jaxon()->psr()->ajax()->process($request, $handler);
@@ -163,7 +170,6 @@ class HelloWorld extends \Jaxon\App\CallableClass
     public function sayHello()
     {
         $this->response->assign('div2', 'innerHTML', 'Hello World!');
-        return $this->response;
     }
 }
 ```
