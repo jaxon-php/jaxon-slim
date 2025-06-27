@@ -3,9 +3,10 @@
 return [
     'app' => [
         'directories' => [
-            realpath(__DIR__ . '/../jaxon/ajax') => [
-                'namespace' => '\\Jaxon\\Ajax',
-                'register' => true,
+            [
+                // 'path' => realpath(__DIR__ . '/../ajax'),
+                // 'namespace' => '\\Jaxon\\Ajax',
+                // 'register' => false,
                 // 'separator' => '', // '.' or '_'
                 // 'protected' => [],
             ],

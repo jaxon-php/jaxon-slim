@@ -44,6 +44,15 @@ class Helper
         $twig = Twig::create($path, $settings);
         $renderer = $twig->getEnvironment();
 
+        // Functions for Jaxon js and CSS codes
+        $renderer->addFunction(new TwigFunction('jxnCss',
+            fn() => jaxon()->css(), ['is_safe' => ['html']]));
+        $renderer->addFunction(new TwigFunction('jxnJs',
+            fn() => jaxon()->js(), ['is_safe' => ['html']]));
+        $renderer->addFunction(new TwigFunction('jxnScript',
+            fn(bool $bIncludeJs = false, bool $bIncludeCss = false) =>
+                jaxon()->script($bIncludeJs, $bIncludeCss), ['is_safe' => ['html']]));
+
         // Filters for custom Jaxon attributes
         $renderer->addFilter(new TwigFilter('jxnHtml',
             fn(JxnCall $xJxnCall) => attr()->html($xJxnCall), ['is_safe' => ['html']]));
@@ -80,15 +89,6 @@ class Helper
         $renderer->addFunction(new TwigFunction('je', fn(...$aParams) => je(...$aParams)));
         $renderer->addFunction(new TwigFunction('jo', fn(...$aParams) => jo(...$aParams)));
         $renderer->addFunction(new TwigFunction('rq', fn(...$aParams) => rq(...$aParams)));
-
-        // Functions for Jaxon js and CSS codes
-        $renderer->addFunction(new TwigFunction('jxnCss',
-            fn() => jaxon()->css(), ['is_safe' => ['html']]));
-        $renderer->addFunction(new TwigFunction('jxnJs',
-            fn() => jaxon()->js(), ['is_safe' => ['html']]));
-        $renderer->addFunction(new TwigFunction('jxnScript',
-            fn(bool $bIncludeJs = false, bool $bIncludeCss = false) =>
-                jaxon()->script($bIncludeJs, $bIncludeCss), ['is_safe' => ['html']]));
 
         return $twig;
     }
