@@ -84,6 +84,8 @@ class Helper
             fn(JsExpr $xJsExpr) => attr()->click($xJsExpr), ['is_safe' => ['html']]));
         $renderer->addFunction(new TwigFunction('jxnEvent',
             fn(array $events) => self::setJxnEvent($events), ['is_safe' => ['html']]));
+        $renderer->addFunction(new TwigFunction('jxnPackage',
+            fn(string $sClass, string $sCode = 'html') => attr()->package($sClass, $sCode), ['is_safe' => ['html']]));
 
         $renderer->addFunction(new TwigFunction('jq', fn(...$aParams) => jq(...$aParams)));
         $renderer->addFunction(new TwigFunction('je', fn(...$aParams) => je(...$aParams)));
